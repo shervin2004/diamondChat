@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
@@ -5,7 +6,10 @@ const { connectMongo } = require('./config/mongo');
 const chatRoutes = require('./api/chat');
 const app = express();
 const httpServer = createServer(app);
-const io = new Server(httpServer);
+const io = new Server(httpServer, {
+    cors: { origin: "*" },
+    transports: ['websocket']
+});
 
 const PORT = process.env.PORT || 8001;
 
@@ -13,6 +17,7 @@ app.use(express.json());
 app.use('/chat', chatRoutes);
 
 io.on('connection', (socket) => {
+    console.log('Handshake details:', socket.handshake);
     console.log('A user connected:', socket.id);
 
     socket.on('joinRoom', (roomId) => {
