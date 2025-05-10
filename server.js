@@ -7,8 +7,8 @@ const chatRoutes = require('./api/chat');
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
-    cors: { origin: "*" },
-    transports: ['websocket']
+    cors: { origin: "*" }, // Allow Postman
+    transports: ['websocket'] // Force WebSocket, skip polling
 });
 
 const PORT = process.env.PORT || 8001;
